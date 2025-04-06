@@ -1,0 +1,15 @@
+REACT JS : librabry : remix,vite,next
+
+MERN : m ,EXPRESS  jS
+
+
+NODE JS:
+middleware:express | NEST 
+
+
+
+npm i express 
+npm i express --dev
+npm i express --g
+
+npm install nodemon -g
