@@ -13,3 +13,5 @@ npm i express --dev
 npm i express --g
 
 npm install nodemon -g
+
+app.js --> routes files -->api end point register --> Controller --> model[database table]
