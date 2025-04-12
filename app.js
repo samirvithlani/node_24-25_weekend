@@ -1,4 +1,5 @@
 const express  = require("express")
+const mongoose= require("mongoose")
 
 //object
 const app = express()
@@ -12,6 +13,14 @@ const userRoutes = require("./src/routes/UserRoutes")
 //localhost:3000/user/users
 app.use("/user",userRoutes)
 
+
+
+
+mongoose.connect("mongodb://127.0.0.1:27017/weekendmern").then(()=>{
+    console.log("database connected..")
+}).catch(()=>{
+    console.log("error while connecting db..")
+})
 
 
 //port.. TOMCAT , port occupied 8080 33006, 27017,8080,51...
