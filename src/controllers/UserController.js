@@ -21,6 +21,71 @@ const getAllUsers = async (req, res) => {
   }
 };
 
+const getUserById=async(req,res)=>{
+
+  //req.params.id
+  //var id = req.params.id
+  const foundUser = await userModel.findById(req.params.id) //{} || null
+  if(foundUser){
+    res.json({
+      message:"user found..",
+      data:foundUser
+    })
+  }
+  else{
+    res.json({
+      message:"user not dound",
+      data:null
+    })
+  }
+  
+
+
+}
+
+// const getUsersByName=async(req,res)=>{
+
+// const foundUsers = await userModel.find({name:req.params.name})
+// if(foundUsers.length>0){
+//   res.json({
+//     message:"users found",
+//     data:foundUsers
+//   })
+// }
+// else{
+//   res.json({
+//     message:"user with this creiteria not found",
+//     data:[]
+//   })
+// }
+
+
+// }
+
+const getUsersByName=async(req,res)=>{
+
+  const query = req.query;
+  console.log("query..",query)
+  //const foundUsers = await userModel.find({name:req.query.name})
+  var age = parseInt(req.query.age)
+  const foundUsers = await userModel.find({name:req.query.name,age:age})
+  if(foundUsers.length>0){
+    res.json({
+      message:"users found",
+      data:foundUsers
+    })
+  }
+  else{
+    res.json({
+      message:"user with this creiteria not found",
+      data:[]
+    })
+  }
+  
+  
+  }
 module.exports = {
   getAllUsers,
+  getUserById,
+  getUsersByName
 };
