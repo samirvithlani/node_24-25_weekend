@@ -15,3 +15,10 @@ npm i express --g
 npm install nodemon -g
 
 app.js --> routes files -->api end point register --> Controller --> model[database table]
+
+ORM  object relational mapping:
+
+object --> schema --> mongodb db -->collection bind..
+
+db.users.find()
+userModel.find()

@@ -1,20 +1,26 @@
 //functions
+const userModel = require("../models/UserModel");
+//userModel == userSchema
+//userModel.find()
 
-const getAllUsers = (req,res) => {
-  var users = [
-    {
-      id: 1,
-      name: "raj",
-    },
-    { id: 2, name: "shyam" },
-  ];
-  //db..
-  res.json({
-    message:"user fetched...",
-    data:users
-  })
+const getAllUsers = async (req, res) => {
+  // userModel.find().then((uises)=>{
+
+  // })
+
+  const users = await userModel.find(); //find []
+  if (users.length > 0) {
+    res.json({
+      message: "user fetched...",
+      data: users,
+    });
+  } else {
+    res.json({
+      message: "user data is empty",
+    });
+  }
 };
 
 module.exports = {
-    getAllUsers,
-}
+  getAllUsers,
+};
