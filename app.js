@@ -3,14 +3,16 @@ const mongoose= require("mongoose")
 
 //object
 const app = express()
-
+app.use(express.json()) //apply json middleware..
 
 //app.use(roleROutes)
 const userRoutes = require("./src/routes/UserRoutes")
+
 //server...
 // localhost:3000/users
 //app.use(userRoutes)
 //localhost:3000/user/users
+//POST localhost:3000/user/user
 app.use("/user",userRoutes)
 
 
