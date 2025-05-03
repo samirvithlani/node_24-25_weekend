@@ -97,34 +97,78 @@ const addUser = async (req, res) => {
   }
 };
 
-const deleteUser = async(req,res)=>{
+const deleteUser = async (req, res) => {
   //req.params.id
-  try{
-
-    const deletedUser = await userModel.findByIdAndDelete(req.params.id)
-    if(deletedUser){
-     res.status(200).json({
-        message:"user deleted",
-        data:deletedUser
-      })
-  }
-  else{
-    res.status(404).json({
-      message:"user not found to delete"
-    })
-  }
-
-
-
-  }catch(err){
-
+  try {
+    const deletedUser = await userModel.findByIdAndDelete(req.params.id);
+    if (deletedUser) {
+      res.status(200).json({
+        message: "user deleted",
+        data: deletedUser,
+      });
+    } else {
+      res.status(404).json({
+        message: "user not found to delete",
+      });
+    }
+  } catch (err) {
     res.status(500).json({
-      message:"internal server error",
-      data:err
-    })
-
+      message: "internal server error",
+      data: err,
+    });
   }
+};
 
+//update tablename set param  where id=?
+
+const updateUser = async (req, res) => {
+  const userId = req.params.id;
+  const dataToUpdate = req.body;
+
+  try {
+    //{new:true} --> updated data
+    //{new:false} --> old data
+    const updatedUser = await userModel.findByIdAndUpdate(
+      userId,
+      dataToUpdate,
+      { new: true }
+    );
+    if (updatedUser) {
+      res.status(200).json({
+        message: "user updated",
+        data: updatedUser,
+      });
+    } else {
+      res.status(404).json({
+        message: "user not found to update",
+      });
+    }
+  } catch (err) {
+    res.status(500).json({
+      message: "internal server error",
+      data: err,
+    });
+  }
+};
+//hobby name --> req.body -->user id >
+//update table set hobby = ? where id = ?
+
+const addHobby = async(req,res)=>{
+
+  const userId = req.params.id; //amitabh, x,y,x...
+  const hoobyName = req.body.hobbyName; //dancing...
+
+  const updatedUser  = await userModel.findByIdAndUpdate(userId,{$push:{hobbies:hoobyName}},{new:true})
+  if (updatedUser) {
+    res.status(200).json({
+      message: "user updated",
+      data: updatedUser,
+    });
+  } else {
+    res.status(404).json({
+      message: "user not found to update",
+    });
+  }
 
 }
 
@@ -133,5 +177,7 @@ module.exports = {
   getUserById,
   getUsersByName,
   addUser,
-  deleteUser
+  deleteUser,
+  updateUser,
+  addHobby,
 };
