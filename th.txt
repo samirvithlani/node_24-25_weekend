@@ -23,3 +23,23 @@ object --> schema --> mongodb db -->collection bind..
 db.users.find()
 userModel.find()
 
+
+role table:
+admin
+useer
+maneger
+
+user:
+roleId fk
+
+create table user(id int primary key auto_increment, 
+roleId int, foreign key(roleId) references role(id));
+
+insert into role values(1,'admin');
+insert into user(1,1)
+
+select * from users;
+
+joins
+populate
+

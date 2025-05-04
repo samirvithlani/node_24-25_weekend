@@ -8,7 +8,7 @@ const getAllUsers = async (req, res) => {
 
   // })
 
-  const users = await userModel.find(); //find []
+  const users = await userModel.find().populate("role"); //find [] //("role") // columnName 
   if (users.length > 0) {
     res.json({
       message: "user fetched...",

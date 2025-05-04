@@ -25,6 +25,14 @@ const userSchema = new Schema({
     bloodGroup:{
         enum:["A+","B+","A-","B-","O"],
         type:String
+    },
+    // roleId:{
+    //     type:Schema.Types.ObjectId,
+    //     ref:"role"
+    // } //both are same..
+    role:{
+        type:Schema.Types.ObjectId,
+        ref:"role"
     }
 },{timestamps:true})
 //userSchema  : bind --> database connectd --> users collection
