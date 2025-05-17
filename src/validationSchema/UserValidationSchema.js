@@ -33,7 +33,7 @@ const zod = require('zod');
 // }
 const userValidationSchema = zod.object({
     name: zod.string().min(2, { message: 'Name must be at least 2 characters long' }),
-    age:zod.number().min(1, { message: 'Age must be at least 1' }),
+    age:zod.number().min(1, { message: 'Age must be at least 1' }).max(100, { message: 'Age must be at most 100' }),
     gender:zod.string(),
     isActive:zod.boolean(),
     hobbies:zod.array(zod.string()),

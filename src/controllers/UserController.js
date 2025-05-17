@@ -3,6 +3,8 @@ const userModel = require("../models/UserModel");
 //userModel == userSchema
 //userModel.find()
 
+const mailUtil = require("../utils/MailUtil")
+
 const getAllUsers = async (req, res) => {
   // userModel.find().then((uises)=>{
 
@@ -84,7 +86,9 @@ const addUser = async (req, res) => {
   //req.body -->{json}
   try {
     const savedUser = await userModel.create(req.body);
+    //mail
     //201 status code...
+    await mailUtil.mailSend(savedUser.email,"welcome","welcome to portal")
     res.status(201).json({
       message: "user saved",
       data: savedUser,
