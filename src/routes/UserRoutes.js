@@ -18,6 +18,7 @@ router.post("/user",zodMiddleware(userValidationSchema),userController.addUser)
 router.delete("/user/:id",userController.deleteUser)
 router.put("/user/:id",userController.updateUser)
 router.put("/addhobby/:id",userController.addHobby)
+router.post("/login",userController.loginUser)
 
 
 module.exports = router

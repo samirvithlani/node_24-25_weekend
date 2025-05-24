@@ -38,7 +38,9 @@ const userValidationSchema = zod.object({
     isActive:zod.boolean(),
     hobbies:zod.array(zod.string()),
     bloodGroup:zod.enum(["A+", "B+", "A-", "B-", "O"]),
-    role:zod.string()
+    role:zod.string(),
+    email:zod.string(),
+    password:zod.string()
 
 }).strict(); //strict() will not allow any extra fields
 module.exports = userValidationSchema

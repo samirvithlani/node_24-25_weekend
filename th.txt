@@ -42,7 +42,22 @@ select * from users;
 
 joins
 populate
-
 api request validation....
+
+
+AUTH:
+
+auth  :
+autho :
+
+password encrypton
+
+MVC: email password:CSRF
+APIs: secure : eamil password : token --> user : object
+
+outh2 security:
+token based security
+
+bearer token:
 
 

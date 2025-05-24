@@ -33,6 +33,12 @@ const userSchema = new Schema({
     role:{
         type:Schema.Types.ObjectId,
         ref:"role"
+    },
+    email:{
+        type:String
+    },
+    password:{
+        type:String
     }
 },{timestamps:true})
 //userSchema  : bind --> database connectd --> users collection

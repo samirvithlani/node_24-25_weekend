@@ -1,16 +1,18 @@
 //functions
 const userModel = require("../models/UserModel");
+const encryptUtil = require("../utils/EncryptUtil");
+const tokenUtil = require("../utils/tokenUtil")
 //userModel == userSchema
 //userModel.find()
 
-const mailUtil = require("../utils/MailUtil")
+const mailUtil = require("../utils/MailUtil");
 
 const getAllUsers = async (req, res) => {
   // userModel.find().then((uises)=>{
 
   // })
 
-  const users = await userModel.find().populate("role"); //find [] //("role") // columnName 
+  const users = await userModel.find().populate("role"); //find [] //("role") // columnName
   if (users.length > 0) {
     res.json({
       message: "user fetched...",
@@ -85,10 +87,11 @@ const addUser = async (req, res) => {
 
   //req.body -->{json}
   try {
+    req.body.password = encryptUtil.encryptPassword(req.body.password);
     const savedUser = await userModel.create(req.body);
     //mail
     //201 status code...
-    await mailUtil.mailSend(savedUser.email,"welcome","welcome to portal")
+    await mailUtil.mailSend(savedUser.email, "welcome", "welcome to portal");
     res.status(201).json({
       message: "user saved",
       data: savedUser,
@@ -157,12 +160,15 @@ const updateUser = async (req, res) => {
 //hobby name --> req.body -->user id >
 //update table set hobby = ? where id = ?
 
-const addHobby = async(req,res)=>{
-
+const addHobby = async (req, res) => {
   const userId = req.params.id; //amitabh, x,y,x...
   const hoobyName = req.body.hobbyName; //dancing...
 
-  const updatedUser  = await userModel.findByIdAndUpdate(userId,{$push:{hobbies:hoobyName}},{new:true})
+  const updatedUser = await userModel.findByIdAndUpdate(
+    userId,
+    { $push: { hobbies: hoobyName } },
+    { new: true }
+  );
   if (updatedUser) {
     res.status(200).json({
       message: "user updated",
@@ -173,8 +179,36 @@ const addHobby = async(req,res)=>{
       message: "user not found to update",
     });
   }
+};
 
-}
+const loginUser = async (req, res) => {
+  const { email, password } = req.body;
+  console.log(email,password)
+
+  //email ---> db object [encruped password] --> plian password
+  const userFromEmail = await userModel.findOne({email: email});
+  console.log(userFromEmail)
+  if (userFromEmail) {
+    //plain password --> db encryped match
+    if (encryptUtil.comparePassword(password, userFromEmail.password)) {
+      //token..
+      const token = tokenUtil.generateToken(userFromEmail.toObject())
+      res.status(200).json({
+        message: "user login successfully",
+        //data: userFromEmail,
+        token:token
+      });
+    } else {
+      res.status(401).json({
+        message: "invalid password..",
+      });
+    }
+  } else {
+    res.status(404).json({
+      message: "user not found",
+    });
+  }
+};
 
 module.exports = {
   getAllUsers,
@@ -184,4 +218,5 @@ module.exports = {
   deleteUser,
   updateUser,
   addHobby,
+  loginUser
 };
