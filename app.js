@@ -5,6 +5,19 @@ const mongoose= require("mongoose")
 const app = express()
 app.use(express.json()) //apply json middleware..
 
+const validateToken = require("./src/middleware/AuthMiddleware") //require...
+
+app.use((req,res,next)=>{
+
+    const publicRoutes =["/user/login"]
+    if(publicRoutes.includes(req.path)){
+        return next() //skip..
+    }
+
+    return validateToken(req,res,next)
+
+})
+
 //app.use(roleROutes)
 const userRoutes = require("./src/routes/UserRoutes")
 

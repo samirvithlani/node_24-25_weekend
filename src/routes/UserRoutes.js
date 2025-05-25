@@ -9,7 +9,7 @@ const userValidationSchema = require("../validationSchema/UserValidationSchema")
 const validateToken = require("../middleware/AuthMiddleware")
 
 //router.get("/users",(req,res)=>{})
-router.get("/users",validateToken,userController.getAllUsers)    
+router.get("/users",userController.getAllUsers)    
 router.get("/user/:id",userController.getUserById) 
 //router.get("/userbyname/:name",userController.getUsersByName)
 router.get("/userbyname",userController.getUsersByName)
