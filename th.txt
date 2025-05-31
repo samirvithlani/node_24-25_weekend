@@ -60,4 +60,22 @@ token based security
 
 bearer token:
 
+login : email -password --> token : user object wrap:
+login : email -password --> token : user.id token:
+
+ try{
+
+                const user = jwt.verify(token,SECRET)
+                    user == user._id
+                    db exists -->next:
+                    role:
+                    api target: manager
+
+
+                console.log(user)
+                next()
+
+ }
+
+
 
