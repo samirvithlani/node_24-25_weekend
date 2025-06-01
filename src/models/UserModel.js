@@ -39,6 +39,9 @@ const userSchema = new Schema({
     },
     password:{
         type:String
+    },
+    user_ref_token:{
+        type:String
     }
 },{timestamps:true})
 //userSchema  : bind --> database connectd --> users collection

@@ -193,10 +193,15 @@ const loginUser = async (req, res) => {
     if (encryptUtil.comparePassword(password, userFromEmail.password)) {
       //token..
       const token = tokenUtil.generateToken(userFromEmail.toObject())
+      //if db token -->expiry
+      const refreshToken = tokenUtil.generateRefereshToken(userFromEmail.toObject())
+      //datbase store...
+      //findByaidandupdate(id,token{refresh})
       res.status(200).json({
         message: "user login successfully",
         //data: userFromEmail,
-        token:token
+        token:token,
+        refreshToken
       });
     } else {
       res.status(401).json({

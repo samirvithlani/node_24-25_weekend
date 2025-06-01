@@ -1,5 +1,6 @@
 const express  = require("express")
 const mongoose= require("mongoose")
+require("dotenv").config()
 
 //object
 const app = express()
@@ -43,7 +44,7 @@ mongoose.connect("mongodb://127.0.0.1:27017/weekendmern").then(()=>{
 
 
 //port.. TOMCAT , port occupied 8080 33006, 27017,8080,51...
-const PORT = 3001
+const PORT = process.env.PORT || 3000
 app.listen(PORT,()=>{
     console.log("server started on port",PORT)
 })

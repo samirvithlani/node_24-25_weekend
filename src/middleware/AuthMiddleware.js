@@ -1,9 +1,11 @@
 const jwt = require("jsonwebtoken")
-const SECRET = "test"
+require("dotenv").config()
+const SECRET =  process.env.JWT_SECRET || "test"
 
 const validateToken = (req,res,next)=>{
 
     var token = req.headers.authorization; //Bearer token
+    
     if(token){
         if(token.startsWith("Bearer ")){
 

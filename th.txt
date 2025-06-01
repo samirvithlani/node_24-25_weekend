@@ -79,3 +79,30 @@ login : email -password --> token : user.id token:
 
 
 
+16 min --> fe requestub ===> exptopn token -->refresh-->
+catch(err){
+	if(jwt type){
+		exipry --> cookeies --> refreshtoken ---> acess
+			api -->getToken --> refreshToken --> db -->
+				user --> id ->accesstoken --> localstrore:
+	}
+	}
+cookies
+
+
+browser 1       - - brwser 2
+token delete        access --> 16 min expire  --> accessto
+ref acc no	     db --->token: logout	
+
+login:
+access
+refres
+
+update
+
+
+
+logout from all
+
+
+
