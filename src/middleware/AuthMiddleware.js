@@ -4,7 +4,7 @@ const SECRET =  process.env.JWT_SECRET || "test"
 
 const validateToken = (req,res,next)=>{
 
-    var token = req.headers.authorization; //Bearer token
+    var token = req.headers.authorization; //Bearer token //access token
     
     if(token){
         if(token.startsWith("Bearer ")){
@@ -13,8 +13,11 @@ const validateToken = (req,res,next)=>{
             //validate...
             try{
 
-                const user = jwt.verify(token,SECRET)
-                console.log(user)
+                const user = jwt.verify(token,SECRET) //{_iat,eat,_id:""} before token exp..
+                //usermode.findbyId(user._id)
+                //if user found...
+                //req.user = foundUsr
+                
                 next()
 
             }catch(err){

@@ -6,6 +6,7 @@ const tokenUtil = require("../utils/tokenUtil")
 //userModel.find()
 
 const mailUtil = require("../utils/MailUtil");
+const UserModel = require("../models/UserModel");
 
 const getAllUsers = async (req, res) => {
   // userModel.find().then((uises)=>{
@@ -88,7 +89,14 @@ const addUser = async (req, res) => {
   //req.body -->{json}
   try {
     req.body.password = encryptUtil.encryptPassword(req.body.password);
-    const savedUser = await userModel.create(req.body);
+    const savedUser = await userModel.create(req.body); //id
+
+    //const refToken = tokenUtil.generateRefereshToken(savedUser._id)
+    //UserModel.findByIdAndUpdate(savedUser._id,{user_ref_token:refToken})
+
+    //refresh token... database store...
+    //updateUser.. token filed accesstoken
+
     //mail
     //201 status code...
     await mailUtil.mailSend(savedUser.email, "welcome", "welcome to portal");
@@ -181,39 +189,80 @@ const addHobby = async (req, res) => {
   }
 };
 
-const loginUser = async (req, res) => {
-  const { email, password } = req.body;
-  console.log(email,password)
+// const loginUser = async (req, res) => {
+//   const { email, password } = req.body;
+//   console.log(email,password)
 
-  //email ---> db object [encruped password] --> plian password
-  const userFromEmail = await userModel.findOne({email: email});
-  console.log(userFromEmail)
-  if (userFromEmail) {
-    //plain password --> db encryped match
-    if (encryptUtil.comparePassword(password, userFromEmail.password)) {
-      //token..
-      const token = tokenUtil.generateToken(userFromEmail.toObject())
-      //if db token -->expiry
-      const refreshToken = tokenUtil.generateRefereshToken(userFromEmail.toObject())
-      //datbase store...
-      //findByaidandupdate(id,token{refresh})
+//   //email ---> db object [encruped password] --> plian password
+//   const userFromEmail = await userModel.findOne({email: email});
+//   console.log(userFromEmail)
+//   if (userFromEmail) {
+//     //plain password --> db encryped match
+//     if (encryptUtil.comparePassword(password, userFromEmail.password)) {
+//       //token..
+//       const token = tokenUtil.generateToken(userFromEmail.toObject())
+//       //if db token -->expiry
+//       const refreshToken = tokenUtil.generateRefereshToken(userFromEmail.toObject())
+//       //datbase store...
+//       //findByaidandupdate(id,token{refresh})
+//       res.status(200).json({
+//         message: "user login successfully",
+//         //data: userFromEmail,
+//         token:token,
+//         refreshToken
+//       });
+//     } else {
+//       res.status(401).json({
+//         message: "invalid password..",
+//       });
+//     }
+//   } else {
+//     res.status(404).json({
+//       message: "user not found",
+//     });
+//   }
+// };
+
+const loginUser = async(req,res)=>{
+
+
+  const {email,password}= req.body //encrypted..
+
+  const userFromEmail = await userModel.findOne({email:email})
+  if(userFromEmail){
+
+    if(encryptUtil.comparePassword(userFromEmail.password,password)){
+
+      //token gen...
+      const token = tokenUtil.generateToken(userFromEmail._id)
+      //db token....if token expire... refresh...
+      //const refreshToken = tokenUtil.generateRefereshToken(userFromEmail._id)
+      //database...
       res.status(200).json({
-        message: "user login successfully",
-        //data: userFromEmail,
-        token:token,
-        refreshToken
-      });
-    } else {
+        message:"login success",
+        token:token
+      })
+
+
+    }else{
       res.status(401).json({
-        message: "invalid password..",
-      });
+        message:"invalid cred..."
+      })
     }
-  } else {
-    res.status(404).json({
-      message: "user not found",
-    });
+
   }
-};
+  else{
+    res.status(404).json({
+      message:"user not found..",
+
+    })
+  }
+
+
+
+
+}
+
 
 module.exports = {
   getAllUsers,

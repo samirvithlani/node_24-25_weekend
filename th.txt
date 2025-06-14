@@ -106,3 +106,68 @@ logout from all
 
 
 
+frontend login : accesstoken: 10 min valid... 11th min accesstoken excetpon token is expired
+
+
+
+cookies -->refreshtok pass -->
+
+
+
+
+try{
+axio.get()
+}cathc(err){
+
+    //token expire...
+    //cookeies.refreshtoken()
+
+}
+
+
+accsstoken:- every api call.... middleware check... accesstoken --> short time span --> 10 min
+token expire -->
+
+
+amazone --> login --> accessToken --->
+
+
+products --> accessToken --> 11 min excetpon -- tokenExpriation
+
+catch(err){
+
+    if(tokenExpriation){
+
+            //refreshtokn -->
+            axios.post("/access-token",headers: { Authorization: `Bearer ${refreshToken}` })
+    }
+
+}
+
+create new api for generation of accesstoken --> refreshtoken
+
+
+generate access-toke(){
+
+    //req.headers. == refreshToken: _id
+    //refreshtoken db get
+    db->token --> userobject-->
+    //generatee new accessToken _id -->
+
+    while getting token from db --> but there are chnace token expired: replace-->
+    
+
+
+}
+
+
+
+//addUSer --> token [refreshTOke] -->6 month --> databse store...
+//login..... accesstoken --> value _id
+//every api call --> accesstoken -->validate middleare -->
+//expire -->
+new api /auth/access-token
+this api will accept refreshToken and give new accessToken
+
+
+
