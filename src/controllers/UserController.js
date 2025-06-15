@@ -90,21 +90,20 @@ const addUser = async (req, res) => {
   try {
     req.body.password = encryptUtil.encryptPassword(req.body.password);
     const savedUser = await userModel.create(req.body); //id
+    
+    const refreshToken = tokenUtil.generateRefereshToken(savedUser._id.toString())
+    console.log("refresh Token has been genereted...",refreshToken)
 
-    //const refToken = tokenUtil.generateRefereshToken(savedUser._id)
-    //UserModel.findByIdAndUpdate(savedUser._id,{user_ref_token:refToken})
-
-    //refresh token... database store...
-    //updateUser.. token filed accesstoken
-
-    //mail
-    //201 status code...
+    //database...
+    await userModel.findByIdAndUpdate(savedUser._id,{user_ref_token:refreshToken})    
     await mailUtil.mailSend(savedUser.email, "welcome", "welcome to portal");
     res.status(201).json({
       message: "user saved",
       data: savedUser,
+      refreshToken
     });
   } catch (err) {
+    console.log(err)
     res.status(500).json({
       message: "internal server error",
       data: err,
@@ -231,7 +230,7 @@ const loginUser = async(req,res)=>{
   const userFromEmail = await userModel.findOne({email:email})
   if(userFromEmail){
 
-    if(encryptUtil.comparePassword(userFromEmail.password,password)){
+    if(encryptUtil.comparePassword(password,userFromEmail.password)){
 
       //token gen...
       const token = tokenUtil.generateToken(userFromEmail._id)
@@ -263,6 +262,40 @@ const loginUser = async(req,res)=>{
 
 }
 
+const generateAccessTokenFromRefreshToken = async(req,res)=>{
+
+  const token = req.body.refreshToken;
+  if(token){
+    
+    const userFormTokenFromDb = await userModel.findOne({user_ref_token:token})
+    if(userFormTokenFromDb){
+
+      //userFormTokenFromDb.user_ref_token expire???
+
+      //acces token...
+      const accessToken = tokenUtil.generateToken(userFormTokenFromDb._id)
+      
+      res.status(200).json({
+        message:"access token",
+        token:accessToken
+      })
+
+    }
+    else{
+      res.status(401).json({
+        message:"not valid user..."
+      })
+    }
+
+
+  }else{
+    res.status(400).json({
+      message:"please pass refresh token..."
+    })
+  }
+
+}
+
 
 module.exports = {
   getAllUsers,
@@ -272,5 +305,6 @@ module.exports = {
   deleteUser,
   updateUser,
   addHobby,
-  loginUser
+  loginUser,
+  generateAccessTokenFromRefreshToken
 };

@@ -167,7 +167,32 @@ generate access-toke(){
 //every api call --> accesstoken -->validate middleare -->
 //expire -->
 new api /auth/access-token
-this api will accept refreshToken and give new accessToken
+this api will accept   and give new accessToken
+
+------------------------------------------------------
+
+component all users:
+
+--->localstoreg --- token --> api call,token pass....
+1 min data --> refresh exception... try catch -->
+catch 
+localhost:3002/user/genereateaccesstoken
+res accesToken ---> localstoreg.. useEffect.,,
+
+
+Authentication:
+Authorization:
+
+getUsers --- >manager admin...
+
+
+
+domain www.3000 --> 3001 [backend...]
+CORS policy
+backedn cors policy enable cors
+
+npm i cors
+
 
 
 

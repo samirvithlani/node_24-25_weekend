@@ -1,8 +1,9 @@
 const jwt = require("jsonwebtoken")
 require("dotenv").config()
 const SECRET =  process.env.JWT_SECRET || "test"
+const userModel = require("../models/UserModel")
 
-const validateToken = (req,res,next)=>{
+const validateToken = async(req,res,next)=>{
 
     var token = req.headers.authorization; //Bearer token //access token
     
@@ -14,11 +15,20 @@ const validateToken = (req,res,next)=>{
             try{
 
                 const user = jwt.verify(token,SECRET) //{_iat,eat,_id:""} before token exp..
-                //usermode.findbyId(user._id)
-                //if user found...
-                //req.user = foundUsr
+                console.log(user)
+                const foundUser = await userModel.findById(user.object).populate("role")
+                if(foundUser && foundUser.role.name=="ADMIN"){
+                    req.user = foundUser
+                    next()
+                }
+                else{
+                    res.status(401).json({
+                        message:"you are not valid user for this plan..."
+                    })
+
+                }
                 
-                next()
+                
 
             }catch(err){
 

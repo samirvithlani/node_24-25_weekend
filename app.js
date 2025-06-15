@@ -1,9 +1,10 @@
 const express  = require("express")
 const mongoose= require("mongoose")
 require("dotenv").config()
-
+//const cors = require("cors")
 //object
 const app = express()
+//app.use(cors())
 app.use(express.json()) //apply json middleware..
 
 const validateToken = require("./src/middleware/AuthMiddleware") //require...
