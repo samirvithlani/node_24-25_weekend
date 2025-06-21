@@ -194,5 +194,14 @@ backedn cors policy enable cors
 npm i cors
 
 
+file: -->copy -->paste --> 
+database:
+server  : aws server --> pc --> local folder--
+cloud storage: aws s3,drive,cloudinary,
+
+multer 
+
+
+
 
 

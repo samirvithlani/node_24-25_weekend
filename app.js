@@ -6,7 +6,6 @@ require("dotenv").config()
 const app = express()
 //app.use(cors())
 app.use(express.json()) //apply json middleware..
-
 const validateToken = require("./src/middleware/AuthMiddleware") //require...
 
 // app.use((req,res,next)=>{
@@ -22,6 +21,7 @@ const validateToken = require("./src/middleware/AuthMiddleware") //require...
 
 //app.use(roleROutes)
 const userRoutes = require("./src/routes/UserRoutes")
+const uploadRoutes  = require("./src/routes/UploadRoutes")
 
 //server...
 // localhost:3000/users
@@ -29,6 +29,7 @@ const userRoutes = require("./src/routes/UserRoutes")
 //localhost:3000/user/users
 //POST localhost:3000/user/user
 app.use("/user",userRoutes)
+app.use("/upload",uploadRoutes)
 
 
 const roleRoutes = require("./src/routes/RoleRotes")
