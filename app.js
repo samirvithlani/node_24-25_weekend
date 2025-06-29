@@ -1,12 +1,14 @@
 const express  = require("express")
 const mongoose= require("mongoose")
 require("dotenv").config()
-//const cors = require("cors")
+const cors = require("cors")
 //object
 const app = express()
-//app.use(cors())
+app.use(cors())
 app.use(express.json()) //apply json middleware..
 const validateToken = require("./src/middleware/AuthMiddleware") //require...
+const Redis = require("ioredis")
+const {Queue} = require("bullmq")
 
 // app.use((req,res,next)=>{
 
@@ -34,6 +36,26 @@ app.use("/upload",uploadRoutes)
 
 const roleRoutes = require("./src/routes/RoleRotes")
 app.use("/role",roleRoutes)
+
+
+//redis connecction
+const redisConnection = new Redis({
+    host:"127.0.0.1",
+    port:"6379"
+    
+})
+
+const myQueue = new Queue("taskQueue",{connection:redisConnection})
+
+app.post("/add-job",async(req,res)=>{
+    const {name} =req.body
+    //business logic.. mail
+    await myQueue.add("task",{name},{delay:0})
+    res.json({
+        message:"job added..."
+    })
+
+})
 
 
 

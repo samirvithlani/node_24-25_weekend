@@ -1,5 +1,7 @@
 const { model } = require("mongoose")
 const multer = require("multer")
+const uploadFiletocloud = require("../utils/CloudinaryUtil")
+
 
 const storage = multer.diskStorage({
     filename:(req,file,cb)=>{
@@ -16,7 +18,7 @@ const upload = multer({
 
 const uploadFile =async(req,res)=>{
 
-    upload(req,res,(err)=>{
+    upload(req,res,async(err)=>{
         if(err){
             res.status(500).json({
                 message:err
@@ -25,9 +27,12 @@ const uploadFile =async(req,res)=>{
         else{
             //file path datbase...
             console.log(req.body)
+            const cloudinaryres = await uploadFiletocloud(req.file.path)
+            //secure_url
             res.status(201).json({
                 message:"file uploaded successfully!!!",
-                data:req.file
+                data:req.file,
+                cloudinaryres
             })
         }
 
