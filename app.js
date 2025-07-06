@@ -9,6 +9,15 @@ app.use(express.json()) //apply json middleware..
 const validateToken = require("./src/middleware/AuthMiddleware") //require...
 const Redis = require("ioredis")
 const {Queue} = require("bullmq")
+const http = require("http")
+const server = http.createServer(app)
+const {Server} = require("socket.io")
+const io = new Server(server,{
+    cors:{
+        origin:"*",
+        methods:['GET','POST']
+    }
+})
 
 // app.use((req,res,next)=>{
 
@@ -38,25 +47,6 @@ const roleRoutes = require("./src/routes/RoleRotes")
 app.use("/role",roleRoutes)
 
 
-//redis connecction
-const redisConnection = new Redis({
-    host:"127.0.0.1",
-    port:"6379"
-    
-})
-
-const myQueue = new Queue("taskQueue",{connection:redisConnection})
-
-app.post("/add-job",async(req,res)=>{
-    const {name} =req.body
-    //business logic.. mail
-    await myQueue.add("task",{name},{delay:0})
-    res.json({
-        message:"job added..."
-    })
-
-})
-
 
 
 
@@ -68,9 +58,18 @@ mongoose.connect("mongodb://127.0.0.1:27017/weekendmern").then(()=>{
 
 
 //port.. TOMCAT , port occupied 8080 33006, 27017,8080,51...
-const PORT = process.env.PORT || 3000
-app.listen(PORT,()=>{
-    console.log("server started on port",PORT)
+
+
+io.on("connection",(socket)=>{
+    console.log("user connected with id",socket.id)
+
+    //on emit
+    socket.on("sendMessage",(data)=>{
+        console.log(`data = ${data}`)
+        //socket.emit("receiveMessage",data.toUpperCase())
+        socket.broadcast.emit("receiveMessage",data.toUpperCase())
+    })
+    
 })
 
 
@@ -78,5 +77,7 @@ app.listen(PORT,()=>{
 
 
 
-
-
+const PORT = process.env.PORT || 3000
+server.listen(PORT,()=>{
+    console.log("server started on port",PORT)
+})

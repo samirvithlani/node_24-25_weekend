@@ -205,3 +205,75 @@ multer
 
 
 
+//redis connecction
+const redisConnection = new Redis({
+    host:"127.0.0.1",
+    port:"6379"
+    
+})
+
+const myQueue = new Queue("taskQueue",{connection:redisConnection})
+
+app.post("/add-job",async(req,res)=>{
+    const {name} =req.body
+    //business logic.. mail
+    await myQueue.add("task",{name},{delay:0})
+    res.json({
+        message:"job added..."
+    })
+
+})
+
+const fakeData={
+    1:{name:"ram",age:22},
+    2:{name:"rajvi",age:23},
+    3:{name:"ajay",age:25},
+    4:{name:"raj",age:26},
+    5:{name:"parth",age:22},
+}
+
+const CACHE_EXPIRY = 600;
+const cache_Middleware=async(req,res,next)=>{
+
+    const {userId} = req.params;
+    try{
+
+        const cacheData = await redisConnection.get(userId)
+        console.log("ca.....",cacheData)
+        if(cacheData){
+            console.log("cache hit...")
+            res.status(200).json({
+                message:"data fetch...",
+                data:JSON.parse(cacheData)
+            })
+        }
+        else{
+            console.log("cache missed...")
+            next()
+        }
+
+    }catch(err){
+
+        res.status(500).json({
+            message:"error while fetching data.."
+        })
+    }
+
+
+}
+
+app.get("/getdatabyuserid/:userId",cache_Middleware,(req,res)=>{
+
+
+    const {userId}= req.params;
+    const userData = fakeData[userId];
+    //cacheData...
+    redisConnection.setex(userId,CACHE_EXPIRY,JSON.stringify(userData))
+    res.status(200).json({
+        message:"data fetch...",
+        data:userData
+    })
+    
+
+})
+
